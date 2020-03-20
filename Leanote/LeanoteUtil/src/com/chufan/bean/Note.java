@@ -3,6 +3,8 @@
  */
 package com.chufan.bean;
 
+import com.alibaba.fastjson.annotation.JSONField;
+
 /**
  * @author Tony
  *         {"IsMarkdown":false,"NoteId":"5e7378ce9ffb544c66000000","NotebookId":"5e7372f4b9c7e4504d0000c6","Title":"1","Content":"A
@@ -12,29 +14,56 @@ package com.chufan.bean;
  */
 
 public class Note {
+	@JSONField(name="ImgSrc")
 	String ImgSrc="";
+	@JSONField(name="NotebookId")
 	String NotebookId="";
-	String CreatedTime="";
+	@JSONField(name="CreatedTime")
+	DateType CreatedTime;
+	@JSONField(name="Err")
 	String Err="";
+	@JSONField(name="Desc")
 	String Desc="";
+	@JSONField(name="IsMarkdown")
 	Boolean IsMarkdown=Boolean.FALSE;
-	String Attachs="";
+	@JSONField(name="Attachs")
+	String[] Attachs= {""};
+	@JSONField(name="LocalIsNew")
 	Boolean LocalIsNew=Boolean.FALSE;
+	@JSONField(name="LocalIsDelete")
 	Boolean LocalIsDelete=Boolean.FALSE;
-	String Tags="";
+	@JSONField(name="Tags")
+	String[] Tags= {""};
+	@JSONField(name="ContentIsDirty")
 	Boolean ContentIsDirty;
+	@JSONField(name="NoteId")
 	String NoteId="";
+	@JSONField(name="IsDeleted")
 	Boolean IsDeleted=Boolean.FALSE;
+	@JSONField(name="PublicTime")
 	String PublicTime="";
+	@JSONField(name="Abstract")
 	String Abstract="";
+	@JSONField(name="Title")
 	String Title="";
+	@JSONField(name="ServerNoteId")
 	String ServerNoteId="";
+	@JSONField(name="Usn")
 	Integer Usn=Integer.valueOf(0);
+	@JSONField(name="InitSync")
 	Boolean InitSync=Boolean.FALSE;
+	@JSONField(name="Content")
 	String Content="";
+	@JSONField(name="UserId")
 	String UserId="";
+	@JSONField(name="IsTrash")
 	Boolean IsTrash=Boolean.FALSE;
-	String UpdatedTime="";
+	@JSONField(name="UpdatedTime")
+	DateType UpdatedTime;
+	@JSONField(name="IsDirty")
+	Boolean IsDirty;
+	@JSONField(name="_id")
+	String _id;
 	/**
 	 * @param imgSrc
 	 * @param notebookId
@@ -62,10 +91,10 @@ public class Note {
 	 * @param isDirty
 	 * @param _id
 	 */
-	public Note(String imgSrc, String notebookId, String createdTime, String err, String desc, Boolean isMarkdown,
-			String attachs, Boolean localIsNew, Boolean localIsDelete, String tags, Boolean contentIsDirty,
+	public Note(String imgSrc, String notebookId, DateType createdTime, String err, String desc, Boolean isMarkdown,
+			String[] attachs, Boolean localIsNew, Boolean localIsDelete, String[] tags, Boolean contentIsDirty,
 			String noteId, Boolean isDeleted, String publicTime, String abstract1, String title, String serverNoteId,
-			Integer usn, Boolean initSync, String content, String userId, Boolean isTrash, String updatedTime,
+			Integer usn, Boolean initSync, String content, String userId, Boolean isTrash, DateType updatedTime,
 			Boolean isDirty, String _id) {
 		super();
 		ImgSrc = imgSrc;
@@ -136,13 +165,13 @@ public class Note {
 	/**
 	 * @return the createdTime
 	 */
-	public String getCreatedTime() {
+	public DateType getCreatedTime() {
 		return CreatedTime;
 	}
 	/**
 	 * @param createdTime the createdTime to set
 	 */
-	public void setCreatedTime(String createdTime) {
+	public void setCreatedTime(DateType createdTime) {
 		CreatedTime = createdTime;
 	}
 	/**
@@ -184,13 +213,13 @@ public class Note {
 	/**
 	 * @return the attachs
 	 */
-	public String getAttachs() {
+	public String[] getAttachs() {
 		return Attachs;
 	}
 	/**
 	 * @param attachs the attachs to set
 	 */
-	public void setAttachs(String attachs) {
+	public void setAttachs(String[] attachs) {
 		Attachs = attachs;
 	}
 	/**
@@ -220,13 +249,13 @@ public class Note {
 	/**
 	 * @return the tags
 	 */
-	public String getTags() {
+	public String[] getTags() {
 		return Tags;
 	}
 	/**
 	 * @param tags the tags to set
 	 */
-	public void setTags(String tags) {
+	public void setTags(String[] tags) {
 		Tags = tags;
 	}
 	/**
@@ -376,13 +405,13 @@ public class Note {
 	/**
 	 * @return the updatedTime
 	 */
-	public String getUpdatedTime() {
+	public DateType getUpdatedTime() {
 		return UpdatedTime;
 	}
 	/**
 	 * @param updatedTime the updatedTime to set
 	 */
-	public void setUpdatedTime(String updatedTime) {
+	public void setUpdatedTime(DateType updatedTime) {
 		UpdatedTime = updatedTime;
 	}
 	/**
@@ -409,6 +438,5 @@ public class Note {
 	public void set_id(String _id) {
 		this._id = _id;
 	}
-	Boolean IsDirty;
-	String _id;
 }
+

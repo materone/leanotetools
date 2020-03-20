@@ -6,6 +6,8 @@ import org.eclipse.swt.widgets.Shell;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
+import com.alibaba.fastjson.TypeReference;
+import com.alibaba.fastjson.serializer.SerializerFeature;
 import com.chufan.bean.Note;
 import com.chufan.tools.ParseJSON;
 
@@ -15,6 +17,7 @@ import org.eclipse.swt.widgets.Menu;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
@@ -62,7 +65,9 @@ public class Main {
 //				}
 //				t.removeAll();
 				File f = new File(filepath);
+				File fout = new File(filepath+".out");
 				try {
+					FileWriter fw = new FileWriter(fout);
 					InputStreamReader isr = new InputStreamReader(new FileInputStream(f), "UTF-8");
 					BufferedReader br = new BufferedReader(isr);
 					String s = null;
@@ -73,9 +78,10 @@ public class Main {
 					ArrayList<String> al = new ArrayList<String>();
 					while((s=br.readLine())!=null) {
 //							System.out.println(s);
-						Note n = JSON.parseObject(s, Note.class);
+						Note n = JSON.parseObject(s, new TypeReference<Note>() {});
 						obj = JSON.parseObject(s);
 						System.out.println(JSON.toJSONString(n, true));
+						JSON.writeJSONString(fw, n,SerializerFeature.PrettyFormat);
 //						System.out.println(n);
 						if (idx==0) {
 							al.add("No");
@@ -110,6 +116,7 @@ public class Main {
 					}
 					br.close();
 					isr.close();
+					fw.close();
 				} catch (IOException e1) {
 					// TODO Auto-generated catch block
 					e1.printStackTrace();
