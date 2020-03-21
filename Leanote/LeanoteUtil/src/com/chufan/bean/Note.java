@@ -11,7 +11,12 @@ import com.alibaba.fastjson.annotation.JSONField;
  *         ","Desc":"","ImgSrc":"","Abstract":"","UserId":"5e7372f4b9c7e4504d0000c5","UpdatedTime":{"$$date":1584625875466},"IsDirty":false,
  *         "LocalIsDelete":false,"CreatedTime":{"$$date":1584625875466},"IsTrash":false,"LocalIsNew":false,"_id":"FhlGnFCmCppVl5Q7",
  *         "Tags":[],"IsDeleted":false,"Usn":6,"PublicTime":"0001-01-01T00:00:00Z","ServerNoteId":"5e737932b9c7e4504d0000cd","InitSync":false,"ContentIsDirty":false,"Attachs":[],"Err":""}
+ *
+ *{"NoteId":"5e761494cbf86a5185000004","NotebookId":"5e761481cbf86a5185000002","Title":"B","Content":"<p>B</p>","Desc":"B","ImgSrc":"","Abstract":"<p>B</p>","UserId":"5e7372f4b9c7e4504d0000c5",
+ *"UpdatedTime":{"$$date":1584796823819},"IsDirty":true,"LocalIsDelete":false,"CreatedTime":{"$$date":1584796823819},"IsTrash":false,"LocalIsNew":true,"_id":"UD6IV6B4Utmhb317"}
  */
+
+
 
 public class Note {
 	@JSONField(name="ImgSrc")

@@ -6,6 +6,9 @@ package com.chufan.bean;
  *{"NotebookId":"5a04ff7c9d3e620387000005","UserId":"5e63c307b9c7e4504d000004","ParentNotebookId":"59c4bf919d3e627ab20000f5","Seq":-1,"Title":"Tomcat","UrlTitle":"Tomcat",
  *"IsBlog":false,"CreatedTime":{"$$date":1510276989000},"UpdatedTime":{"$$date":1510276989000},"Usn":470,"IsDeleted":false,"ServerNotebookId":"5a04ff7c9d3e620387000005",
  *"IsDirty":false,"LocalIsNew":false,"LocalIsDelete":false,"_id":"XGwbsmqcuVFeFYeJ","NumberNotes":1}
+ *
+ *{"Title":"CoreOS","Seq":-1,"UserId":"5e7372f4b9c7e4504d0000c5","ParentNotebookId":"5e76146acbf86a5185000000","LocalIsNew":true,"IsDirty":true,
+ *"NotebookId":"5e761481cbf86a5185000002","_id":"GlGwhttJ1qTgyoCi","NumberNotes":1}
  */
 
 import com.alibaba.fastjson.annotation.JSONField;
