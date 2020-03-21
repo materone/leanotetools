@@ -34,6 +34,20 @@ public class Notebook {
 	String UpdatedTime="";
 	@JSONField(name="Usn")
 	Integer Usn;
+	@JSONField(name="IsDeleted")
+	Boolean IsDeleted;
+	@JSONField(name="ServerNotebookId")
+	String ServerNotebookId="";
+	@JSONField(name="IsDirty")
+	Boolean IsDirty;
+	@JSONField(name="LocalIsNew")
+	Boolean LocalIsNew;
+	@JSONField(name="_id")
+	String _id="";
+	@JSONField(name="NumberNotes")
+	Integer NumberNotes;
+	@JSONField(name="LocalIsDelete")
+	Boolean LocalIsDelete;
 	/**
 	 * @return the notebookId
 	 */
@@ -61,7 +75,7 @@ public class Notebook {
 	 */
 	public Notebook(String notebookId, String userId, String parentNotebookId, Integer seq, String title,
 			String urlTitle, Boolean isBlog, String createdTime, String updatedTime, Integer usn, Boolean isDeleted,
-			String serverNotebookId, Boolean isDirty, Boolean localIsNew, String _id, String numberNotes,
+			String serverNotebookId, Boolean isDirty, Boolean localIsNew, String _id, Integer numberNotes,
 			Boolean localIsDelete) {
 		super();
 		NotebookId = notebookId;
@@ -263,13 +277,13 @@ public class Notebook {
 	/**
 	 * @return the numberNotes
 	 */
-	public String getNumberNotes() {
+	public Integer getNumberNotes() {
 		return NumberNotes;
 	}
 	/**
 	 * @param numberNotes the numberNotes to set
 	 */
-	public void setNumberNotes(String numberNotes) {
+	public void setNumberNotes(Integer numberNotes) {
 		NumberNotes = numberNotes;
 	}
 	/**
@@ -284,18 +298,4 @@ public class Notebook {
 	public void setLocalIsDelete(Boolean localIsDelete) {
 		LocalIsDelete = localIsDelete;
 	}
-	@JSONField(name="IsDeleted")
-	Boolean IsDeleted;
-	@JSONField(name="ServerNotebookId")
-	String ServerNotebookId="";
-	@JSONField(name="IsDirty")
-	Boolean IsDirty;
-	@JSONField(name="LocalIsNew")
-	Boolean LocalIsNew;
-	@JSONField(name="_id")
-	String _id="";
-	@JSONField(name="NumberNotes")
-	String NumberNotes="";
-	@JSONField(name="LocalIsDelete")
-	Boolean LocalIsDelete;
 }

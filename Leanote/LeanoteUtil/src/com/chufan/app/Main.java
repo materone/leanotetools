@@ -58,6 +58,11 @@ public class Main {
 		public void widgetSelected(SelectionEvent e) {
 			String dataType = (String) ((ToolItem) e.getSource()).getData();
 			FileDialog chooser = new FileDialog(shlLeannotetools);
+			if ("note".equals(dataType)) {
+				chooser.setFileName("notes.db");
+			} else if ("notebook".equals(dataType)) {
+				chooser.setFileName("notebooks.db");
+			}
 			String filepath = chooser.open();
 			if (filepath != null) {
 				System.out.println(filepath);
@@ -87,12 +92,13 @@ public class Main {
 //							System.out.println(s);
 						if ("note".equals(dataType)) {
 //							System.out.println("Begin note decode");
-							Note n = JSON.parseObject(s, new TypeReference<Note>() {});
+							Note n = JSON.parseObject(s, new TypeReference<Note>() {
+							});
 							obj = JSON.parseObject(s);
+
 							n.setContentIsDirty(null);
 							n.setIsDeleted(null);
 							n.setInitSync(null);
-							n.setIsMarkdown(null);
 							n.setPublicTime(null);
 							n.setServerNoteId(null);
 							n.setUsn(null);
@@ -106,13 +112,20 @@ public class Main {
 							Notebook nb = JSON.parseObject(s, new TypeReference<Notebook>() {
 							});
 							obj = JSON.parseObject(s);
+							// "CreatedTime":{"$$date":1510276989000},"UpdatedTime":{"$$date":1510276989000},"Usn":470,"IsDeleted":false,"ServerNotebookId":"5a04ff7c9d3e620387000005","LocalIsDelete":false,
+							nb.setCreatedTime(null);
+							nb.setUpdatedTime(null);
+							nb.setUsn(null);
+							nb.setIsDeleted(null);
+							nb.setServerNotebookId(null);
 							nb.setIsDirty(Boolean.TRUE);
 							nb.setLocalIsNew(Boolean.TRUE);
+							nb.setSeq(Integer.valueOf(-1));
 							JSON.writeJSONString(bw, nb);// ,SerializerFeature.PrettyFormat);
 							bw.write("\n");
 						}
 //						System.out.println(n);
-						if (idx == 0 && obj !=null) {
+						if (idx == 0 && obj != null) {
 							al.add("No");
 							for (Iterator<String> iterator = obj.keySet().iterator(); iterator.hasNext();) {
 								String type = (String) iterator.next();

@@ -3,7 +3,7 @@ package com.chufan.bean;
 import com.alibaba.fastjson.annotation.JSONField;
 
 public class DateType {
-	@JSONField(name="$$Date")
+	@JSONField(name="$$date")
 	public Long $$date;
 
 	/**
