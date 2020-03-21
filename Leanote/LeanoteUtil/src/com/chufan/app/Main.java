@@ -9,17 +9,21 @@ import com.alibaba.fastjson.JSONObject;
 import com.alibaba.fastjson.TypeReference;
 import com.alibaba.fastjson.serializer.SerializerFeature;
 import com.chufan.bean.Note;
+import com.chufan.bean.Notebook;
 import com.chufan.tools.ParseJSON;
 
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.widgets.Menu;
 
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
@@ -52,12 +56,13 @@ public class Main {
 	final class refreshContent extends SelectionAdapter {
 		@Override
 		public void widgetSelected(SelectionEvent e) {
+			String dataType = (String) ((ToolItem) e.getSource()).getData();
 			FileDialog chooser = new FileDialog(shlLeannotetools);
 			String filepath = chooser.open();
-			if(filepath != null) {
+			if (filepath != null) {
 				System.out.println(filepath);
 				Table t = getTable();
-				if(t!=null && !t.isDisposed()) {
+				if (t != null && !t.isDisposed()) {
 					t.dispose();
 				}
 //				for (int i = 0; i < t.getColumnCount(); i++) {
@@ -65,25 +70,49 @@ public class Main {
 //				}
 //				t.removeAll();
 				File f = new File(filepath);
-				File fout = new File(filepath+".out");
+				File fout = new File(filepath + ".out");
 				try {
-					FileWriter fw = new FileWriter(fout);
+//					FileWriter fw = new FileWriter(fout);
+					OutputStreamWriter osw = new OutputStreamWriter(new FileOutputStream(fout), "UTF-8");
+					BufferedWriter bw = new BufferedWriter(osw);
 					InputStreamReader isr = new InputStreamReader(new FileInputStream(f), "UTF-8");
 					BufferedReader br = new BufferedReader(isr);
 					String s = null;
-					JSONObject obj;
+					JSONObject obj = null;
 					int idx = 0;
 					String[] heads = {};
 					String[] conts = {};
 					ArrayList<String> al = new ArrayList<String>();
-					while((s=br.readLine())!=null) {
+					while ((s = br.readLine()) != null) {
 //							System.out.println(s);
-						Note n = JSON.parseObject(s, new TypeReference<Note>() {});
-						obj = JSON.parseObject(s);
-						System.out.println(JSON.toJSONString(n, true));
-						JSON.writeJSONString(fw, n,SerializerFeature.PrettyFormat);
+						if ("note".equals(dataType)) {
+//							System.out.println("Begin note decode");
+							Note n = JSON.parseObject(s, new TypeReference<Note>() {});
+							obj = JSON.parseObject(s);
+							n.setContentIsDirty(null);
+							n.setIsDeleted(null);
+							n.setInitSync(null);
+							n.setIsMarkdown(null);
+							n.setPublicTime(null);
+							n.setServerNoteId(null);
+							n.setUsn(null);
+							n.setIsDirty(Boolean.TRUE);
+							n.setLocalIsNew(Boolean.TRUE);
+							JSON.writeJSONString(bw, n);// ,SerializerFeature.PrettyFormat);
+							bw.write("\n");
+						} else if ("notebook".equals(dataType)) {
+//							System.out.println("Begin notebook decode");
+//							System.out.println(s);
+							Notebook nb = JSON.parseObject(s, new TypeReference<Notebook>() {
+							});
+							obj = JSON.parseObject(s);
+							nb.setIsDirty(Boolean.TRUE);
+							nb.setLocalIsNew(Boolean.TRUE);
+							JSON.writeJSONString(bw, nb);// ,SerializerFeature.PrettyFormat);
+							bw.write("\n");
+						}
 //						System.out.println(n);
-						if (idx==0) {
+						if (idx == 0 && obj !=null) {
 							al.add("No");
 							for (Iterator<String> iterator = obj.keySet().iterator(); iterator.hasNext();) {
 								String type = (String) iterator.next();
@@ -95,41 +124,42 @@ public class Main {
 							CreateTableInComposite(heads);
 							t = getTable();
 						}
-						
+
 						al.clear();
 						al.add(String.valueOf(idx));
 						for (int i = 1; i < heads.length; i++) {
-							if(heads[i].equals("Content")) {
+							if (heads[i].equals("Content")) {
 								al.add("...");
-							}else {
+							} else {
 //								System.out.println(i+":"+heads[i]+"="+obj.getString(heads[i]));
 								al.add(obj.getString(heads[i]));
 							}
 						}
-						
-						TableItem ti = new TableItem(table,SWT.None);
+
+						TableItem ti = new TableItem(table, SWT.None);
 						ti.setText(al.toArray(conts));
-						String title = (String)obj.get("Title");
-						
-						System.out.println(new String(title));
+						String title = (String) obj.get("Title");
+
+//						System.out.println(new String(title));
 						idx++;
 					}
 					br.close();
 					isr.close();
-					fw.close();
+					bw.close();
+					osw.close();
 				} catch (IOException e1) {
 					// TODO Auto-generated catch block
 					e1.printStackTrace();
-				} 
-				for (int i = 0; i < table.getColumnCount(); i++)  
-		        {  
-		            table.getColumn(i).pack();  
-		        }
+				}
+				for (int i = 0; i < table.getColumnCount(); i++) {
+					table.getColumn(i).pack();
+				}
 //				table.pack();
 //				getScrolledComposite().pack();
 			}
 		}
 	}
+
 	protected Shell shlLeannotetools;
 	private Table table;
 	private ScrolledComposite scrolledComposite;
@@ -217,6 +247,7 @@ public class Main {
 		mntmAbout.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
+
 				System.out.println("About selected: " + new Date());
 			}
 		});
@@ -225,22 +256,23 @@ public class Main {
 		Menu menu_1 = new Menu(shlLeannotetools);
 		shlLeannotetools.setMenu(menu_1);
 		this.CentreWnd(shlLeannotetools);
-		
+
 		ToolBar toolBar = new ToolBar(shlLeannotetools, SWT.FLAT | SWT.RIGHT);
 		toolBar.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, true, false, 1, 1));
-		
+
 		ToolItem tltmOpen = new ToolItem(toolBar, SWT.NONE);
-		tltmOpen.setText("Open");
+		tltmOpen.setText("Note");
+		tltmOpen.setData("note");
 		tltmOpen.setImage(SWTResourceManager.getImage(Main.class, "/javax/swing/plaf/metal/icons/ocean/floppy.gif"));
 		tltmOpen.addSelectionListener(new refreshContent());
-		
+
 		ToolItem tltmClear = new ToolItem(toolBar, SWT.NONE);
 		tltmClear.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 				FileDialog chooser = new FileDialog(shlLeannotetools);
 				String filepath = chooser.open();
-				if(filepath != null) {
+				if (filepath != null) {
 					System.out.println(filepath);
 				}
 				Table t = getTable();
@@ -248,7 +280,7 @@ public class Main {
 				TableItem ti = t.getItem(0);
 				JSONObject obj = new JSONObject();
 				for (int i = 0; i < t.getColumnCount(); i++) {
-					//System.out.print(ti.getText(i));
+					// System.out.print(ti.getText(i));
 					obj.put(tc[i].getText(), ti.getText(i));
 				}
 				System.out.println(obj.toJSONString());
@@ -256,14 +288,20 @@ public class Main {
 		});
 		tltmClear.setText("Save");
 		tltmClear.setImage(SWTResourceManager.getImage(Main.class, "/com/chufan/app/leanote.png"));
-		
+
+		ToolItem tltmNewItem = new ToolItem(toolBar, SWT.NONE);
+		tltmNewItem.setData("notebook");
+		tltmNewItem.addSelectionListener(new refreshContent());
+		tltmNewItem.setImage(SWTResourceManager.getImage(Main.class, "/com/chufan/app/copy.png"));
+		tltmNewItem.setText("Notebook");
+
 		scrolledComposite = new ScrolledComposite(shlLeannotetools, SWT.BORDER | SWT.H_SCROLL | SWT.V_SCROLL);
 		scrolledComposite.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
 		scrolledComposite.setExpandHorizontal(true);
 		scrolledComposite.setExpandVertical(true);
-		
+
 //		CreateTableInComposite();
-		
+
 //		scrolledComposite.dispose();
 
 	}
@@ -277,7 +315,7 @@ public class Main {
 		table.setLinesVisible(true);
 		for (int i = 0; i < heads.length; i++) {
 			String type = heads[i];
-			TableColumn tc = new TableColumn(table,SWT.None);
+			TableColumn tc = new TableColumn(table, SWT.None);
 			tc.setText(type);
 			tc.setMoveable(true);
 			tc.setResizable(true);
@@ -299,12 +337,15 @@ public class Main {
 		}
 		shell.setLocation((width - x) / 2, (height - y) / 2);
 	}
+
 	protected Table getTable() {
 		return table;
 	}
+
 	protected void setTable(Table t) {
 		table = t;
 	}
+
 	public ScrolledComposite getScrolledComposite() {
 		return scrolledComposite;
 	}
